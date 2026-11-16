@@ -1,0 +1,18 @@
+# Chaque jour : si une nouvelle version de Zen Player est sortie, la verifie et la met
+# dans la release "zen" (ManuTV propose ensuite la mise a jour sur sa tuile).
+name: Mise a jour de Zen Player
+on:
+  schedule:
+    - cron: "17 5 * * *"   # tous les jours vers 6 h (heure de Paris)
+  workflow_dispatch: {}     # bouton "Run workflow" pour lancer a la main
+permissions:
+  contents: write
+jobs:
+  zen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Chercher, verifier et publier
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash zen-maj.sh
