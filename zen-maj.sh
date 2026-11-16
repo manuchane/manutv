@@ -42,7 +42,7 @@ mkdir f && unzip -q z.bin -d f
 for n in $PKG config.armeabi_v7a config.fr; do
     [ -f "f/$n.apk" ] || { echo "!! $n.apk absent"; exit 1; }
     out=$("$SIGNER" verify --print-certs "f/$n.apk" 2>&1)
-    echo "$out" | grep -qE "^(Signer #1|V[0-9.]+ Signer): certificate SHA-256 digest: $CERT" || { echo "!! $n : mauvaise signature"; echo "$out" | head -15; exit 1; }
+    echo "$out" | grep -qE "^(Signer #1|V[0-9.]+ Signer):? certificate SHA-256 digest: $CERT" || { echo "!! $n : mauvaise signature"; echo "$out" | head -15; exit 1; }
     echo "$out" | grep -qE "^Source Stamp Signer:? certificate SHA-256 digest: $STAMP" || { echo "!! $n : pas de tampon Google Play"; exit 1; }
 done
 BADGE=$("$AAPT" dump badging "f/$PKG.apk" 2>/dev/null)
