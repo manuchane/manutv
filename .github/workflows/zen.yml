@@ -4,7 +4,12 @@ name: Mise a jour de Zen Player
 on:
   schedule:
     - cron: "17 5 * * *"   # tous les jours vers 6 h (heure de Paris)
-  workflow_dispatch: {}     # bouton "Run workflow" pour lancer a la main
+  workflow_dispatch:        # bouton "Run workflow" pour lancer a la main
+    inputs:
+      test:
+        description: "Test sans rien publier (fait comme si GitHub avait la version 143)"
+        type: boolean
+        default: false
 permissions:
   contents: write
 jobs:
@@ -15,4 +20,6 @@ jobs:
       - name: Chercher, verifier et publier
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY: ${{ inputs.test && '1' || '' }}
+          DEPART: ${{ inputs.test && '143' || '' }}
         run: bash zen-maj.sh
